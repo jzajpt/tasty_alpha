@@ -9,6 +9,8 @@ pytest = "*"
 [packages]
 cryptofeed = "*"
 click = "*"
+pandas = "*"
+blinker = "*"
 
 [requires]
 python_version = "3.7"
