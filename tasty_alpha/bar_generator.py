@@ -1,6 +1,7 @@
 import datetime
 from blinker import signal
 import pandas as pd
+from .trade import Trade
 
 COLUMN_NAMES = ['time', 'price', 'amount']
 new_bar = signal('new-bar')
@@ -16,7 +17,8 @@ class CSVTradeProcessor:
         self.df.apply(self.send_signal, axis=1)
         processing_finished.send()
 
-    def send_signal(self, trade):
+    def send_signal(self, row):
+        trade = Trade(timestamp=row.time, price=row.price, amount=row.amount)
         signal('new-trade').send(trade)
 
 class CSVBarWriter:

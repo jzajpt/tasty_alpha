@@ -1,6 +1,7 @@
 import click
 from .bar_generator import CSVTradeProcessor, CSVBarWriter
 from .bars import DollarBars, TickBars, VolumeBars
+from .feed import FeedProcessor
 
 @click.command()
 @click.option('--file', '-f', default='', help='Input CSV file')
@@ -18,7 +19,8 @@ def cli(file, bar, threshold):
         print(f'Invalid bar: {bar}')
         return
     bar_writer = CSVBarWriter('output.csv')
-    trade_processor = CSVTradeProcessor(file)
+    # trade_processor = CSVTradeProcessor(file)
+    trade_processor = FeedProcessor()
     trade_processor.run()
 
 @click.command()

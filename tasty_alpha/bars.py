@@ -5,7 +5,7 @@ threshold_reached = signal('threshold-reached')
 
 class Bar:
     def __init__(self, first_trade):
-        self.time = first_trade.time
+        self.time = first_trade.timestamp
         self.open = first_trade.price
         self.high = first_trade.price
         self.low = first_trade.price
