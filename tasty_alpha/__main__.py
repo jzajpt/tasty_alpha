@@ -1,18 +1,8 @@
+import asyncio
+from aiorun import run
 import click
-from .csv_io import CSVTradeProcessor, CSVBarWriter
-from .bars import DollarBars, TickBars, VolumeBars
 from .feed import FeedProcessor
-
-def new_bars(bar, threshold):
-    if bar == 'tick':
-        return TickBars(threshold)
-    elif bar == 'dollar':
-        return  DollarBars(threshold)
-    elif bar == 'volume':
-        return  VolumeBars(threshold)
-    else:
-        raise Exception(f'Invalid bar: {bar}')
-
+from .backtest import run_backtest
 
 @click.group()
 def cli():
@@ -22,16 +12,13 @@ def cli():
 @click.option('--file', '-f', default='', help='Input CSV file')
 @click.option('--bar', '-b', default='tick', help='Bar type')
 @click.option('--threshold', '-t', type=int, default='', help='Bar type')
-def backtest(file, bar, threshold):
-    bars = new_bars(bar, threshold)
-    bar_writer = CSVBarWriter('output.csv')
-    trade_processor = CSVTradeProcessor(file)
-    trade_processor.run()
+def backtest(file: str, bar: str, threshold: int):
+    run(run_backtest(file, bar, threshold))
 
 @click.command()
 @click.option('--bar', '-b', default='tick', help='Bar type')
 @click.option('--threshold', '-t', type=int, default='', help='Bar type')
-def livefeed(bar, threshold):
+def livefeed(bar: str, threshold: int):
     bars = new_bars(bar, threshold)
     trade_processor = FeedProcessor()
     trade_processor.run()

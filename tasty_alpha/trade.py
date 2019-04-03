@@ -4,3 +4,7 @@ class Trade:
         self.amount = amount
         self.price = price
 
+    @property
+    def dollar_value(self):
+        return self.price * self.amount
+

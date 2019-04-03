@@ -11,6 +11,8 @@ cryptofeed = "*"
 click = "*"
 pandas = "*"
 blinker = "*"
+aiopubsub = "*"
+aiorun = "*"
 
 [requires]
 python_version = "3.7"
