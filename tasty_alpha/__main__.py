@@ -1,9 +1,8 @@
 import asyncio
 from aiorun import run
 import click
-from .feed import FeedProcessor
-from .backtest import run_backtest
-from .feed import run_livefeed
+from .io.feed import run_livefeed
+from .backtest.runner import run_backtest
 
 @click.group()
 def cli():
@@ -19,8 +18,9 @@ def backtest(file: str, bar_type: str, threshold: int) -> None:
 @click.command()
 @click.option('--bar-type', '-b', default='tick', help='Bar type')
 @click.option('--threshold', '-t', type=int, default='', help='Bar type')
-def livefeed(bar_type: str, threshold: int) -> None:
-    run_livefeed(bar_type, threshold)
+@click.option('--pair', '-p', type=str, default='BTC-USDT', help='Bar type')
+def livefeed(bar_type: str, threshold: int, pair: str) -> None:
+    run_livefeed(bar_type, threshold, pair)
 
 cli.add_command(backtest)
 cli.add_command(livefeed)

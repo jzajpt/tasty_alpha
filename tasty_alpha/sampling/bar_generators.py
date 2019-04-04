@@ -1,7 +1,7 @@
 import asyncio
 from aiopubsub import Hub, Publisher, Subscriber, Key
 from typing import Union
-from .trade import Trade
+from ..trade import Trade
 from .bar import Bar
 
 class ThresholdBarGenerator:
@@ -19,11 +19,15 @@ class ThresholdBarGenerator:
             self.bar = Bar(trade)
         self.bar.on_new_trade(key, trade)
         if self.value > self.threshold:
-            self.value = 0
-            new_bar_key = Key('new-bar')
-            self.publisher.publish(new_bar_key, self.bar)
-            self.bar = Bar(trade)
+            self._build_new_bar(trade)
         self.value += self.metric(trade)
+
+    def _build_new_bar(self, trade: Trade) -> Bar:
+        self.value = 0
+        new_bar_key = Key('new-bar')
+        self.publisher.publish(new_bar_key, self.bar)
+        self.bar = Bar(trade)
+
 
 class TickBarGenerator(ThresholdBarGenerator):
     def metric(self, trade: Trade) -> float:
@@ -35,7 +39,7 @@ class VolumeBarGenerator(ThresholdBarGenerator):
 
 class DollarBarGenerator(ThresholdBarGenerator):
     def metric(self, trade: Trade) -> float:
-        return trade.amount * trade.price
+        return trade.dollar_value
 
 PossibleBarTypes = Union[TickBarGenerator, DollarBarGenerator, VolumeBarGenerator]
 
@@ -45,7 +49,7 @@ def new_bar_generator(bar: str,
         ) -> PossibleBarTypes:
     if bar == 'tick':
         return TickBarGenerator(hub, threshold)
-    elif bar == 'dollar':
+    elif bar == 'dollar' or bar == 'base':
         return  DollarBarGenerator(hub, threshold)
     elif bar == 'volume':
         return  VolumeBarGenerator(hub, threshold)

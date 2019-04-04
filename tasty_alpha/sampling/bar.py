@@ -1,5 +1,5 @@
 from aiopubsub import Key
-from .trade import Trade
+from ..trade import Trade
 
 class Bar:
     def __init__(self, first_trade: Trade) -> None:
@@ -36,5 +36,6 @@ class Bar:
             self.low = trade.price
         self.close = trade.price
         self.dollar_value += trade.dollar_value
+        self.volume += trade.amount
         self.count += 1
 

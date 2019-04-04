@@ -3,8 +3,8 @@ from aiopubsub import Hub, Publisher, Subscriber, Key
 import datetime
 from loguru import logger
 import pandas as pd
-from .bar import Bar
-from .trade import Trade
+from ..sampling.bar import Bar
+from ..trade import Trade
 
 COLUMN_NAMES = ['time', 'price', 'amount']
 
@@ -31,7 +31,7 @@ class CSVTradeProcessor:
 
 
 class CSVBarWriter:
-    def __init__(self, hub: Hub, filename: str) -> None:
+    def __init__(self, hub: Hub, filename: str, dump_wait: bool = True) -> None:
         self.filename = filename
         self.subscriber = Subscriber(hub, 'csv_bar_writer')
         new_bar_key = Key('*', 'new-bar')
@@ -40,14 +40,18 @@ class CSVBarWriter:
         self.subscriber.add_sync_listener(processing_finished_key,
                 self.on_processing_finished)
         self.bars = []
+        self.dump_wait = dump_wait
 
     def on_new_bar(self, key: Key, bar: Bar) -> None:
         logger.info('CSVBarWriter#on_new_bar {bar}', bar=bar)
         self.bars.append(bar.to_dict())
+        if not self.dump_wait:
+            self.on_processing_finished(None, None)
 
     def on_processing_finished(self, key: Key, _: None) -> None:
         logger.info('Saving CSV file with bars')
         df = pd.DataFrame(self.bars)
         print(df.head())
         df.to_csv(self.filename)
+
 
