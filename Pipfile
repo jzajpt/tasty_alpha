@@ -13,6 +13,7 @@ pandas = "*"
 blinker = "*"
 aiopubsub = "*"
 aiorun = "*"
+loguru = "*"
 
 [requires]
 python_version = "3.7"
