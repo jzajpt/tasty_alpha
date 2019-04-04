@@ -1,5 +1,8 @@
+from aiopubsub import Key
+from .trade import Trade
+
 class Bar:
-    def __init__(self, first_trade):
+    def __init__(self, first_trade: Trade) -> None:
         self.time = first_trade.timestamp
         self.open = first_trade.price
         self.high = first_trade.price
@@ -9,10 +12,10 @@ class Bar:
         self.dollar_value = first_trade.price * first_trade.amount
         self.count = 1
 
-    def __str__(self):
+    def __str__(self) -> None:
         return f"[{self.open}, {self.high}, {self.low}, {self.close}] {self.count}"
 
-    def to_dict(self):
+    def to_dict(self) -> None:
         return {
             'time': self.time,
             'open': self.open,
@@ -24,7 +27,7 @@ class Bar:
             'count': self.count,
         }
 
-    def on_new_trade(self, key, trade):
+    def on_new_trade(self, key: Key, trade: Trade) -> None:
         if self.count == 0:
             self.open = trade.price
         if not self.high or trade.price > self.high:

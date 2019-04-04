@@ -18,7 +18,7 @@ def new_bar_generator(bar: str,
     else:
         raise Exception(f'Invalid bar generator type: {bar}')
 
-async def run_backtest(file: str, bar: str, threshold: int):
+async def run_backtest(file: str, bar: str, threshold: int) -> None:
     hub = aiopubsub.Hub()
     bar_generator = new_bar_generator(bar, hub, threshold)
     bar_writer = CSVBarWriter(hub, 'output.csv')

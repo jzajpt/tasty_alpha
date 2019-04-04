@@ -6,14 +6,14 @@ from blinker import signal
 from .trade import Trade
 
 class FeedProcessor:
-    def __init__(self):
+    def __init__(self) -> None:
         self.feed = FeedHandler()
         binance_feed = Binance(pairs=['BTC-USDT'],
                 channels=[TRADES],
                 callbacks={TRADES: TradeCallback(self.trade)})
         self.feed.add_feed(binance_feed)
 
-    def run(self):
+    def run(self) -> None:
         self.feed.run()
 
     async def trade(self, feed, pair, order_id, timestamp, side, amount, price):

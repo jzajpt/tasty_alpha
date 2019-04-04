@@ -14,7 +14,7 @@ class ThresholdBarGenerator:
         self.bar = None
         self.value = 0
 
-    def on_new_trade(self, key, trade) -> None:
+    def on_new_trade(self, key: Key, trade: Trade) -> None:
         if not self.bar:
             self.bar = Bar(trade)
         if self.value > self.threshold:
