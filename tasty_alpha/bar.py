@@ -35,6 +35,6 @@ class Bar:
         if not self.low or trade.price < self.low:
             self.low = trade.price
         self.close = trade.price
-        self.dollar_value = trade.price * trade.amount
+        self.dollar_value += trade.dollar_value
         self.count += 1
 

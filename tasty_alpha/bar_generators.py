@@ -39,3 +39,16 @@ class DollarBarGenerator(ThresholdBarGenerator):
 
 PossibleBarTypes = Union[TickBarGenerator, DollarBarGenerator, VolumeBarGenerator]
 
+def new_bar_generator(bar: str,
+        hub: Hub,
+        threshold: int
+        ) -> PossibleBarTypes:
+    if bar == 'tick':
+        return TickBarGenerator(hub, threshold)
+    elif bar == 'dollar':
+        return  DollarBarGenerator(hub, threshold)
+    elif bar == 'volume':
+        return  VolumeBarGenerator(hub, threshold)
+    else:
+        raise Exception(f'Invalid bar generator type: {bar}')
+
