@@ -1,4 +1,4 @@
-from aiopubsub import Hub, Key, Publisher, Subscriber
+from aiopubsub import Hub, Publisher, Subscriber
 from cryptofeed.callback import TradeCallback
 from cryptofeed import FeedHandler
 from cryptofeed.exchanges import Bitmex, Coinbase, Bitfinex, Poloniex, Gemini, HitBTC, Bitstamp, Kraken, Binance
