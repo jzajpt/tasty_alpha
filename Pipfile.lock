@@ -191,10 +191,10 @@
         },
         "cryptofeed": {
             "hashes": [
-                "sha256:2fb36dc481ea0e3809b7e842e87be2329936e7185adc587d9d56d403abf00286"
+                "sha256:115e13e6ea1ed3bf5ea8612dee9fe35c10f8644160eba4ecef3ff23fe78bf280"
             ],
             "index": "pypi",
-            "version": "==0.20.2"
+            "version": "==0.21.0"
         },
         "idna": {
             "hashes": [

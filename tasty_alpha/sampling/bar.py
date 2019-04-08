@@ -9,7 +9,7 @@ class Bar:
         self.low = first_trade.price
         self.close = first_trade.price
         self.volume = first_trade.amount
-        self.dollar_value = first_trade.price * first_trade.amount
+        self.dollar_value = first_trade.dollar_value
         self.count = 1
 
     def __str__(self) -> None:
@@ -27,7 +27,7 @@ class Bar:
             'count': self.count,
         }
 
-    def on_new_trade(self, key: Key, trade: Trade) -> None:
+    def append(self, trade: Trade) -> None:
         if self.count == 0:
             self.open = trade.price
         if not self.high or trade.price > self.high:

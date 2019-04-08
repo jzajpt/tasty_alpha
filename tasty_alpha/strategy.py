@@ -6,7 +6,12 @@ from .sampling.bar import Bar
 class Strategy:
     def __init__(self, hub: Hub) -> None:
         self.subscriber = Subscriber(hub, 'strategy')
+        self.subscriber.add_sync_listener(events.AnyNewBar, self.store_new_bar)
         self.subscriber.add_sync_listener(events.AnyNewBar, self.on_new_bar)
+        self.bars = []
+
+    def store_new_bar(self, key: Key, bar: Bar):
+        self.bars.append(bar)
 
     def on_new_bar(self, key: Key, bar: Bar):
         pass

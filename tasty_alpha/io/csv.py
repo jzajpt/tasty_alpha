@@ -49,7 +49,7 @@ class CSVBarWriter:
     def on_processing_finished(self, key: Key, _: None) -> None:
         logger.info('Saving CSV file with bars')
         df = pd.DataFrame(self.bars)
-        print(df.head())
+        logger.info(df.head())
         df.to_csv(self.filename)
 
 
