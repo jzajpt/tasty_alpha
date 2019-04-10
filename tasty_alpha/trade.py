@@ -1,4 +1,13 @@
 class Trade:
+    """
+    Represents a trade that has occured on a market.
+
+    Attributes:
+    timestamp (int)
+    amount (float)
+    price (float)
+    """
+
     def __init__(self, timestamp: int, amount: float, price: float) -> None:
         self.timestamp = timestamp
         self.amount = amount
