@@ -2,6 +2,20 @@ from aiopubsub import Key
 from ..trade import Trade
 
 class Bar:
+    """
+    Bar represents a price statistics observed during a predefined frequency.
+
+    Attributes:
+    time (int) - Unix timestamp of when the bar was started
+    open (float) - Opening price when bar was started
+    closing (float) - Closing price of bar
+    high (float) - Maximum price observed during a bar
+    low (float) - Minimum price observed during a bar
+    volume (float) - Total volume of trades during a bar
+    dollar_value (float) - Total dollar value of trades during a bar
+    count (int) - Number of trades
+    """
+
     def __init__(self, first_trade: Trade) -> None:
         self.time = first_trade.timestamp
         self.open = first_trade.price
@@ -28,6 +42,9 @@ class Bar:
         }
 
     def append(self, trade: Trade) -> None:
+        """
+        Updates bar statistics based on a trade.
+        """
         if self.count == 0:
             self.open = trade.price
         if not self.high or trade.price > self.high:

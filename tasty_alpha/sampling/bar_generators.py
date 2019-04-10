@@ -6,6 +6,11 @@ from .bar import Bar
 from .. import events
 
 class ThresholdBarGenerator:
+    """
+    ThresholdBarGenerator samples price statistics and generates a new bar
+    when predefined threshold of given statistics has been reached.
+    """
+
     def __init__(self, hub: Hub, threshold: int):
         self.subscriber = Subscriber(hub, 'threshold_bars')
         self.subscriber.add_sync_listener(events.AnyNewTrade, self.on_new_trade)
@@ -29,14 +34,26 @@ class ThresholdBarGenerator:
 
 
 class TickBarGenerator(ThresholdBarGenerator):
+    """
+    TickBarGenerator generates bars after given number of trades.
+    """
+
     def metric(self, trade: Trade) -> float:
         return 1
 
 class VolumeBarGenerator(ThresholdBarGenerator):
+    """
+    VolumeBarGenerator generates bars after given volume traded.
+    """
+
     def metric(self, trade: Trade) -> float:
         return trade.amount
 
 class DollarBarGenerator(ThresholdBarGenerator):
+    """
+    DollarBarGenerator generates bars after given dollar value traded.
+    """
+
     def metric(self, trade: Trade) -> float:
         return trade.dollar_value
 

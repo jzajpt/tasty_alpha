@@ -5,6 +5,7 @@ from .position import Position
 class PositionManager:
     """
     PositionManager handles opening, closing and book-keeping of positions
+    inside a strategy.
     """
 
     def __init__(self, asset: Asset):
