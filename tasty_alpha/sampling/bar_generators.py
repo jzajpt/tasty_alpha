@@ -1,4 +1,3 @@
-import asyncio
 from aiopubsub import Hub, Publisher, Subscriber, Key
 from typing import Union
 from ..trade import Trade
