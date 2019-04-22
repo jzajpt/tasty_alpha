@@ -14,6 +14,7 @@ blinker = "*"
 aiopubsub = "*"
 aiorun = "*"
 loguru = "*"
+arctic = "*"
 
 [requires]
 python_version = "3.7"

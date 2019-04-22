@@ -12,4 +12,7 @@ class Asset:
 
 class Assets:
     BTC = Asset("BTC", "Bitcoin")
+    EUR = Asset("EUR", "Euro")
+    USD = Asset("USD", "US Dollar")
+    USDT = Asset("USDT", "US Dollar Tether")
 
