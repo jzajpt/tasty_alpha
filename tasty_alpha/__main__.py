@@ -3,7 +3,7 @@ from aiorun import run
 import click
 import os
 from .io.feed import run_livefeed
-from .backtest.runner import run_backtest, run_backtest_from_file
+from .backtest.runner import run_backtest
 
 @click.group()
 def cli():
@@ -11,6 +11,13 @@ def cli():
 
 
 @click.command()
+@click.option(
+    '--strategy-file',
+    '-f',
+    required=True,
+    type=click.Path(),
+    help='Python file with your strategy'
+)
 @click.option(
     '--bar-type',
     '-b',
@@ -24,26 +31,29 @@ def cli():
     default=None,
     help='Bar type'
 )
-def backtest(file: str, bar_type: str, threshold: int) -> None:
-    run(run_backtest(bar_type, threshold))
+def backtest(strategy_file, bar_type: str, threshold: int) -> None:
+    run(run_backtest(strategy_file, bar_type, threshold))
 
 
 @click.command()
 @click.option(
     '--filename',
     '-f',
+    required=True,
     type=click.Path(),
     help='Filename'
 )
 @click.option(
     '--library',
     '-l',
+    required=True,
     type=str,
     help='Library to store the data'
 )
 @click.option(
     '--symbol',
     '-s',
+    required=True,
     type=str,
     help='Symbol used to store/retrieve the data'
 )
@@ -61,9 +71,26 @@ def ingest(filename: str,
 
 
 @click.command()
-@click.option('--bar-type', '-b', default='tick', help='Bar type')
-@click.option('--threshold', '-t', type=int, default='', help='Bar type')
-@click.option('--pair', '-p', type=str, default='BTC-USDT', help='Bar type')
+@click.option(
+    '--bar-type',
+    '-b',
+    default='tick',
+    help='Bar type'
+)
+@click.option(
+    '--threshold',
+    '-t',
+    type=int,
+    default='',
+    help='Bar type'
+)
+@click.option(
+    '--pair',
+    '-p',
+    type=str,
+    default='BTC-USDT',
+    help='Pair'
+)
 def livefeed(bar_type: str, threshold: int, pair: str) -> None:
     run_livefeed(bar_type, threshold, pair)
 

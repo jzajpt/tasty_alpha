@@ -4,6 +4,7 @@ from arctic import Arctic
 from arctic.date import DateRange
 from loguru import logger
 from .csv import COLUMN_NAMES
+from ..exchange import Exchange
 from ..trade import Trade
 from ..market import Market
 from .. import events
@@ -19,11 +20,11 @@ def ingest_trades(filename: str, library: str, symbol: str) -> None:
     library.write(symbol, df, metadata={'source': 'csv'})
 
 class ArcticTradeProcessor:
-    def __init__(self, hub: Hub, library: str, market: Market) -> None:
-        self.library_name = library
+    def __init__(self, hub: Hub, exchange: Exchange, market: Market) -> None:
+        self.library_name = str(exchange)
         self.symbol = str(market)
         self.store = Arctic('localhost')
-        self.library = self.store[library]
+        self.library = self.store[self.library_name]
         self.publisher = Publisher(hub, prefix='arctic_trade_processor')
 
     def run(self) -> None:
