@@ -15,6 +15,7 @@ aiopubsub = "*"
 aiorun = "*"
 loguru = "*"
 arctic = "*"
+pyti = "*"
 
 [requires]
 python_version = "3.7"

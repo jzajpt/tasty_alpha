@@ -17,7 +17,7 @@ def test_tick_bar_generation_after_threshold():
     assert len(bars) == 0
     for i in range(5):
         trade = Trade(12345, price=1.0, amount=1.0)
-        publisher.publish(events.NewTrade, trade)
+        publisher.publish(['test-BTCUSD', 'new-trade'], trade)
     assert len(bars) == 1
 
 
@@ -33,7 +33,7 @@ def test_volume_bar_generation_after_threshold():
     assert len(bars) == 0
     for i in range(6):
         trade = Trade(12345, price=1.0, amount=1.0)
-        publisher.publish(events.NewTrade, trade)
+        publisher.publish(['test-BTCUSD', 'new-trade'], trade)
     assert len(bars) == 2
 
 
@@ -49,6 +49,6 @@ def test_dollar_bar_generation_after_threshold():
     assert len(bars) == 0
     for i in range(5):
         trade = Trade(12345, price=0.5, amount=1.0)
-        publisher.publish(events.NewTrade, trade)
+        publisher.publish(['test-BTCUSD', 'new-trade'], trade)
     assert len(bars) == 1
 

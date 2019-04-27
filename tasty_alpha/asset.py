@@ -12,7 +12,11 @@ class Asset:
 
 class Assets:
     BTC = Asset("BTC", "Bitcoin")
+    LTC = Asset("LTC", "Litecoin")
+    XRP = Asset("XRP", "Ripple")
+    USDT = Asset("USDT", "US Dollar Tether")
+
     EUR = Asset("EUR", "Euro")
     USD = Asset("USD", "US Dollar")
-    USDT = Asset("USDT", "US Dollar Tether")
+    GBP = Asset("GBP", "British Pound")
 

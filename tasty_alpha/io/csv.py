@@ -28,7 +28,7 @@ class CSVTradeProcessor:
 
     def send_signal(self, row) -> None:
         trade = Trade(timestamp=row.time, price=row.price, amount=row.amount)
-        self.publisher.publish('new-trade', trade)
+        self.publisher.publish(['csvfile-BTCUSD', 'new-trade'], trade)
 
 
 class CSVBarWriter:

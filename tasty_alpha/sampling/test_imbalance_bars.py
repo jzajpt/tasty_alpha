@@ -24,7 +24,7 @@ def tib_generator(hub):
 def test_tib_bar_generation_tb_sequence(publisher, tib_generator):
     for i in range(5):
         trade = Trade(12345, price=1.0 + i, amount=1.0)
-        publisher.publish(events.NewTrade, trade)
+        publisher.publish(['test-BTCUSD', 'new-trade'], trade)
     assert len(tib_generator.b_ts) == 5
     assert tib_generator.b_ts == [0.0, 1.0, 1.0, 1.0, 1.0]
     assert tib_generator.theta == 4
@@ -32,7 +32,7 @@ def test_tib_bar_generation_tb_sequence(publisher, tib_generator):
 def test_tib_bar_generation_tb_sequence(publisher, tib_generator):
     for i in range(5):
         trade = Trade(12345, price=10.0 - i, amount=1.0)
-        publisher.publish(events.NewTrade, trade)
+        publisher.publish(['test-BTCUSD', 'new-trade'], trade)
     assert len(tib_generator.b_ts) == 5
     assert tib_generator.b_ts == [0.0, -1.0, -1.0, -1.0, -1.0]
     assert tib_generator.theta == -4
@@ -46,6 +46,6 @@ def test_tib_bar_generation_generates(publisher, subscriber, hub):
     n = 100
     for p in np.random.normal(scale=0.1,size=n) + np.linspace(1, 20, n):
         trade = Trade(12345, price=p, amount=1.0)
-        publisher.publish(events.NewTrade, trade)
-    assert len(bars) == 1
+        publisher.publish(['test-BTCUSD', 'new-trade'], trade)
+    assert len(bars) > 1
 

@@ -1,12 +1,14 @@
 from aiopubsub import Hub, Publisher, Subscriber, Key
+from loguru import logger
 import numpy as np
+from pyti.exponential_moving_average import exponential_moving_average as ema
 from ..trade import Trade
 from .bar import Bar
-from .. import events, utils
+from .. import events
 
 class ImbalanceBarGenerator:
-    def _build_new_bar(self, trade: Trade) -> Bar:
-        self.publisher.publish(events.NewBar, self.bar)
+    def _build_new_bar(self, trade: Trade, namespace: str) -> Bar:
+        self.publisher.publish([namespace, 'new-bar'], self.bar)
         self.bar = Bar(trade)
 
 class TickImbalanceBarGenerator(ImbalanceBarGenerator):
@@ -28,8 +30,10 @@ class TickImbalanceBarGenerator(ImbalanceBarGenerator):
         self.bar = None
         self.last_trade = None
         self.b_ts = []
+        self.t_vals = []
         self.theta = 0
         self.expected_theta = initial_theta
+        self.initial_T = 50
 
     def price_change(self, trade: Trade) -> int:
         if self.last_trade:
@@ -46,8 +50,18 @@ class TickImbalanceBarGenerator(ImbalanceBarGenerator):
         self.bar.append(trade)
         self.last_trade = trade
         if np.abs(self.theta) >= np.abs(self.expected_theta):
-            self._build_new_bar(trade)
+            self.t_vals.append(self.bar.count)
+            window = 5
+            if len(self.t_vals) > window:
+                expected_T = ema(self.t_vals, window)[-1]
+            else:
+                expected_T = self.t_vals[-1]
+            namespace = key[1]
+            self._build_new_bar(trade, namespace)
             self.theta = 0
-            # print(utils.ewma(self.b_ts, 10))
-
+            logger.info(f"Expected T: {expected_T}")
+            # print(ema(self.b_ts, 10))
+            probability = ema(self.b_ts, 10)[-1]
+            self.expected_theta = expected_T * (2 * probability - 1)
+            logger.info(self.expected_theta)
 

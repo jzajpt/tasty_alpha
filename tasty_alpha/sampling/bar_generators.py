@@ -1,7 +1,8 @@
 from aiopubsub import Hub, Publisher, Subscriber, Key
-from typing import Union
+from typing import Union, Iterable
 from ..trade import Trade
 from .bar import Bar
+from .imbalance_bars import TickImbalanceBarGenerator
 from .. import events
 
 class ThresholdBarGenerator:
@@ -23,13 +24,16 @@ class ThresholdBarGenerator:
             self.bar = Bar(trade)
         self.bar.append(trade)
         if self.value >= self.threshold:
-            self._build_new_bar(trade)
+            namespace = key[1]
+            self._build_new_bar(trade, namespace)
         self.value += self.metric(trade)
 
-    def _build_new_bar(self, trade: Trade) -> Bar:
+    def _build_new_bar(self, trade: Trade, namespace: str) -> Bar:
         self.value = 0
-        self.publisher.publish(events.NewBar, self.bar)
+        key = [namespace, 'new-bar']
+        self.publisher.publish(key, self.bar)
         self.bar = Bar(trade)
+        return self.bar
 
 
 class TickBarGenerator(ThresholdBarGenerator):
@@ -59,15 +63,17 @@ class DollarBarGenerator(ThresholdBarGenerator):
 PossibleBarTypes = Union[TickBarGenerator, DollarBarGenerator, VolumeBarGenerator]
 
 def new_bar_generator(bar: str,
-        hub: Hub,
-        threshold: int
-        ) -> PossibleBarTypes:
+                      hub: Hub,
+                      threshold: int
+                      ) -> PossibleBarTypes:
     if bar == 'tick':
         return TickBarGenerator(hub, threshold)
     elif bar == 'dollar' or bar == 'base':
         return  DollarBarGenerator(hub, threshold)
     elif bar == 'volume':
         return  VolumeBarGenerator(hub, threshold)
+    elif bar == 'tick_imbalance' or bar == 'tib':
+        return  TickImbalanceBarGenerator(hub, threshold)
     else:
         raise Exception(f'Invalid bar generator type: {bar}')
 
