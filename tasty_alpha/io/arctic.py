@@ -3,6 +3,7 @@ import pandas as pd
 from arctic import Arctic
 from arctic.date import DateRange
 from loguru import logger
+from typing import Optional
 from .csv import COLUMN_NAMES
 from ..exchange import Exchange
 from ..trade import Trade
@@ -20,17 +21,21 @@ def ingest_trades(filename: str, library: str, symbol: str) -> None:
     library.write(symbol, df, metadata={'source': 'csv'})
 
 class ArcticTradeProcessor:
-    def __init__(self, hub: Hub, exchange: Exchange, market: Market) -> None:
+    def __init__(self, hub: Hub,
+                 exchange: Exchange,
+                 market: Market,
+                 date_range: Optional[DateRange] = None
+                 ) -> None:
         self.library_name = str(exchange)
         self.symbol = str(market)
         self.store = Arctic('localhost')
         self.library = self.store[self.library_name]
+        self.date_range = date_range
         self.publisher = Publisher(hub, prefix='arctic_trade_processor')
 
     def run(self) -> None:
         logger.info("Processing trades from Arctic")
-        date_range = DateRange('2016-01-01', '2019-01-01')
-        item = self.library.read(self.symbol, date_range=date_range)
+        item = self.library.read(self.symbol, date_range=self.date_range)
         logger.info("Finished reading, launching trades")
         item.data.apply(self.send_signal, axis=1)
         self.publisher.publish(events.ProcessingFinished, None)

@@ -16,6 +16,7 @@ aiorun = "*"
 loguru = "*"
 arctic = "*"
 pyti = "*"
+click-datetime = "*"
 
 [requires]
 python_version = "3.7"

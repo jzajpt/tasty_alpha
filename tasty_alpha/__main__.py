@@ -1,6 +1,8 @@
 import asyncio
 from aiorun import run
 import click
+from click_datetime import Datetime
+from datetime import datetime
 import os
 from .io.feed import run_livefeed
 from .backtest.runner import run_backtest
@@ -19,10 +21,23 @@ def cli():
     help='Python file with your strategy'
 )
 @click.option(
+    '-s',
+    '--start',
+    type=Datetime('%Y-%m-%d'),
+    help='The start date of the backtest.',
+)
+@click.option(
+    '-e',
+    '--end',
+    type=Datetime('%Y-%m-%d'),
+    default=datetime.now(),
+    help='The end date of the backtest.',
+)
+@click.option(
     '--bar-type',
     '-b',
     default='tick',
-    help='Bar type'
+    help='Bar type for backtest'
 )
 @click.option(
     '--threshold',
@@ -31,8 +46,12 @@ def cli():
     default=None,
     help='Bar type'
 )
-def backtest(strategy_file, bar_type: str, threshold: int) -> None:
-    run(run_backtest(strategy_file, bar_type, threshold))
+def backtest(strategy_file: str,
+             start: Datetime,
+             end: Datetime,
+             bar_type: str,
+             threshold: int) -> None:
+    run(run_backtest(strategy_file, start, end, bar_type, threshold))
 
 
 @click.command()

@@ -1,5 +1,6 @@
-import asyncio
 import aiopubsub
+import asyncio
+from arctic.date import DateRange
 import re
 import runpy
 from typing import Union, TextIO, Optional
@@ -13,6 +14,8 @@ from ..sampling.bar_generators import DollarBarGenerator, TickBarGenerator, \
     VolumeBarGenerator, PossibleBarTypes, new_bar_generator
 
 async def run_backtest(file: str,
+                       start,
+                       end,
                        bar: str,
                        threshold: int) -> None:
     hub = aiopubsub.Hub()
@@ -26,8 +29,12 @@ async def run_backtest(file: str,
 
     strategy_code = runpy.run_path(file)
     strategy = strategy_code[strategy_name](hub)
+    if start is not None:
+        date_range = DateRange(start, end)
+    else:
+        date_range = None
     trade_processor = ArcticTradeProcessor(hub, strategy.exchange,
-            strategy.market)
+            strategy.market, date_range)
     trade_processor.run()
     asyncio.get_event_loop().stop()
 

@@ -11,6 +11,7 @@ class MACrossStrategy(Strategy):
     market = Markets.BTCUSD
 
     def on_new_bar(self, key: aiopubsub.Key, bar: Bar):
+        print(bar.time)
         if len(self.bars) < 80:
             return
 

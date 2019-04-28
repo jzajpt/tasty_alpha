@@ -27,3 +27,27 @@ class Strategy:
     def on_new_bar(self, key: Key, bar: Bar) -> None:
         pass
 
+class MultiStrategy:
+    """
+    Multi market strategy.
+    """
+    pairs = []
+
+    def __init__(self, hub: Hub) -> None:
+        self.subscriber = Subscriber(hub, 'multi_strategy')
+        for pair in self.pairs:
+            namespace = f"{pair[0]}-{pair[1]}"
+            bar_key = Key('*', namespace, 'new-bar')
+            self.subscriber.add_sync_listener(bar_key, self.store_new_bar)
+            self.subscriber.add_sync_listener(bar_key, self.on_new_bar)
+        self.bars = {}
+
+    def store_new_bar(self, key: Key, bar: Bar) -> None:
+        namespace = key[1]
+        if namespace not in self.bars:
+            self.bars[namespace] = []
+        self.bars[namespace].append(bar)
+
+    def on_new_bar(self, key: Key, bar: Bar) -> None:
+        pass
+
