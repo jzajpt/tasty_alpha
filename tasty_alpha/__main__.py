@@ -4,7 +4,7 @@ import click
 from click_datetime import Datetime
 from datetime import datetime
 import os
-from .io.feed import run_livefeed
+from .live.runner import run_livefeed
 from .backtest.runner import run_backtest
 
 @click.group()
@@ -91,6 +91,13 @@ def ingest(filename: str,
 
 @click.command()
 @click.option(
+    '--strategy-file',
+    '-f',
+    required=True,
+    type=click.Path(),
+    help='Python file with your strategy'
+)
+@click.option(
     '--bar-type',
     '-b',
     default='tick',
@@ -110,8 +117,8 @@ def ingest(filename: str,
     default='BTC-USDT',
     help='Pair'
 )
-def livefeed(bar_type: str, threshold: int, pair: str) -> None:
-    run_livefeed(bar_type, threshold, pair)
+def livefeed(strategy_file: str, bar_type: str, threshold: int, pair: str) -> None:
+    run_livefeed(strategy_file, bar_type, threshold, pair)
 
 
 cli.add_command(backtest)

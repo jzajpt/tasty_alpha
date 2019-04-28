@@ -1,10 +1,24 @@
 from aiopubsub import Key, Hub, Subscriber
 from loguru import logger
 import numpy as np
+import re
+import runpy
 from .exchange import Exchanges
 from .market import Market, Markets
 from .position_manager import PositionManager
 from .sampling.bar import Bar
+
+def read_strategy_name(file: str):
+    with open(file, 'r') as f:
+        strategy_file = f.read()
+        match = re.search("class (.+)\(Strategy\):", strategy_file)
+        if match:
+            return match[1]
+
+def read_and_run_strategy_file(file: str):
+    strategy_name = read_strategy_name(file)
+    strategy_code = runpy.run_path(file)
+    return strategy_code[strategy_name]
 
 class Strategy:
     """
