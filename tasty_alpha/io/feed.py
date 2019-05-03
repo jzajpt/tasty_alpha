@@ -1,21 +1,25 @@
 from aiopubsub import Hub, Publisher, Subscriber
 from cryptofeed.callback import TradeCallback
 from cryptofeed import FeedHandler
-from cryptofeed.exchanges import Bitmex, Coinbase, Bitfinex, Poloniex, Gemini, HitBTC, Bitstamp, Kraken, Binance
+from cryptofeed.exchanges import Bitmex, Coinbase, Bitfinex, Poloniex, Bitstamp, Kraken, Binance
 from cryptofeed.defines import TRADES
+from cryptofeed.feed import Feed
 from loguru import logger
 from ..sampling.bar import Bar
 from ..trade import Trade
 
 class FeedProcessor:
-    def __init__(self, hub: Hub, pair: str) -> None:
+    def __init__(self, hub: Hub, exchange_class: str, pair: str) -> None:
         self.feed = FeedHandler()
         self.publisher = Publisher(hub, prefix='feed_processor')
         self.pair = pair
-        binance_feed = Binance(pairs=[pair],
-                channels=[TRADES],
-                callbacks={TRADES: TradeCallback(self.trade)})
-        self.feed.add_feed(binance_feed)
+        self._add_feed(exchange_class)
+
+    def _add_feed(self, exchange_class: str):
+        trades_feed = exchange_class(pairs=[self.pair],
+                                     channels=[TRADES],
+                                     callbacks={TRADES: TradeCallback(self.trade)})
+        self.feed.add_feed(trades_feed)
 
     def run(self) -> None:
         self.feed.run()

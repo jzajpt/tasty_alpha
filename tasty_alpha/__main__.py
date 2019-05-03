@@ -36,6 +36,7 @@ def cli():
 @click.option(
     '--bar-type',
     '-b',
+    type=click.Choice(['tick', 'volume', 'dollar', 'tib']),
     default='tick',
     help='Bar type for backtest'
 )
@@ -44,7 +45,7 @@ def cli():
     '-t',
     type=int,
     default=None,
-    help='Bar type'
+    help='Threshold value'
 )
 def backtest(strategy_file: str,
              start: Datetime,
@@ -100,6 +101,7 @@ def ingest(filename: str,
 @click.option(
     '--bar-type',
     '-b',
+    type=click.Choice(['tick', 'volume', 'dollar', 'tib']),
     default='tick',
     help='Bar type'
 )
@@ -108,7 +110,14 @@ def ingest(filename: str,
     '-t',
     type=int,
     default='',
-    help='Bar type'
+    help='Threshold value'
+)
+@click.option(
+    '--exchange',
+    '-e',
+    type=click.Choice(['Binance', 'Bitfinex', 'Bitstamp', 'Coinbase', 'Kraken']),
+    default='Binance',
+    help='Exchange'
 )
 @click.option(
     '--pair',
@@ -117,8 +126,12 @@ def ingest(filename: str,
     default='BTC-USDT',
     help='Pair'
 )
-def livefeed(strategy_file: str, bar_type: str, threshold: int, pair: str) -> None:
-    run_livefeed(strategy_file, bar_type, threshold, pair)
+def livefeed(strategy_file: str,
+             bar_type: str,
+             threshold: int,
+             exchange: str,
+             pair: str) -> None:
+    run_livefeed(strategy_file, bar_type, threshold, exchange, pair)
 
 
 cli.add_command(backtest)

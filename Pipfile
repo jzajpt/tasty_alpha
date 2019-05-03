@@ -16,6 +16,7 @@ loguru = "*"
 arctic = "*"
 pyti = "*"
 click-datetime = "*"
+ccxt = "*"
 
 [requires]
 python_version = "3.7"

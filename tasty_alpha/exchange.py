@@ -7,7 +7,10 @@ class Exchange:
 
 
 class Exchanges:
+    Binance = Exchange('Binance')
     Bitstamp = Exchange('Bitstamp')
+    Bitfinex = Exchange('Bitfinex')
     Coinbase = Exchange('Coinbase')
     Kraken = Exchange('Kraken')
+    Poloniex = Exchange('Poloniex')
 

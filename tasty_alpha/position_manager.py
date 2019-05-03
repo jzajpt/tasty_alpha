@@ -1,15 +1,15 @@
 import numpy as np
-from .asset import Asset
+from .market import Market
 from .position import Position
 
 class PositionManager:
     """
     PositionManager handles opening, closing and book-keeping of positions
-    inside a strategy.
+    on the market.
     """
 
-    def __init__(self, asset: Asset):
-        self.asset = asset
+    def __init__(self, market: Market):
+        self.market = market
         self.position = None
         self.past_positions = []
 
@@ -23,7 +23,7 @@ class PositionManager:
     def open_position(self, amount: float, price: float) -> None:
         if self.position:
             raise Exception("Cannot open position if one is already open!")
-        self.position = Position(self.asset, amount)
+        self.position = Position(self.market.base, amount)
         self.position.open(price)
 
     def close_position(self, price: float) -> None:
