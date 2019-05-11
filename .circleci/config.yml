@@ -27,7 +27,7 @@ jobs:
       - run:
           command: |  # use pipenv to install dependencies
             sudo pip install pipenv
-            pipenv install
+            pipenv install --dev
 
       - run: sudo chown -R circleci:circleci /usr/local/bin
       - run: sudo chown -R circleci:circleci /usr/local/lib/python3.7/site-packages
