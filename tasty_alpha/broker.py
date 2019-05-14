@@ -8,6 +8,7 @@ from .market import Market
 from .position import Position
 from .order import Order, OrderType, OrderSide
 from .trade import Trade
+from .utils import utc_now
 
 class Broker:
     pass
@@ -43,7 +44,7 @@ class BacktestBroker(Broker):
         if self._timestamp is not None:
             return self._timestamp
         else:
-            return datetime.now()
+            return utc_now()
 
     def log_trade_timestamp(self, key: Key, trade: Trade) -> None:
         self._timestamp = trade.timestamp

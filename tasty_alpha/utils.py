@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 import numpy as np
 
 def ewma(values, window):
@@ -9,3 +10,5 @@ def ewma(values, window):
     ema = np.convolve(weights, values)[window-1:-window+1]
     return ema
 
+def utc_now() -> datetime:
+    return datetime.now(timezone.utc)

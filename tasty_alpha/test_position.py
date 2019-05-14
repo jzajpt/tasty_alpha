@@ -30,3 +30,4 @@ def test_position_close_calculates_realized_pnl_with_fees(position):
     position.close(price=1008.5, fees=5.0425)
     assert position.realized_pnl == ((1008.5 - 5.0425) - 1005.0)
     assert position.status == PositionStatus.Closed
+    assert position.closed_at

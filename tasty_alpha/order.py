@@ -5,6 +5,7 @@ from typing import Optional
 from .asset import Asset
 from .exchange import Exchange
 from .market import Market
+from .utils import utc_now
 
 class OrderType(Enum):
     MARKET = "market"
@@ -33,7 +34,7 @@ class Order:
     price: Optional[float] = None
     status: OrderStatus = OrderStatus.LOCAL
     exchange: Exchange = field(default_factory=default_exchange)
-    timestamp: datetime = field(default_factory=datetime.now)
+    timestamp: datetime = field(default_factory=utc_now)
 
 @dataclass
 class LimitOrder(Order):

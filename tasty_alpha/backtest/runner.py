@@ -28,13 +28,15 @@ async def run_backtest(file: str,
         broker = BacktestBroker(hub)
         strategy = read_and_run_strategy_file(file)(hub, broker, p1=p1, p2=p2)
         if start is not None:
+            print(start)
+            print(end)
             date_range = DateRange(start, end)
         else:
             date_range = None
         trade_processor = ArcticTradeProcessor(hub,
-                                              strategy.exchange,
-                                              strategy.market,
-                                              date_range)
+                                               strategy.exchange,
+                                               strategy.market,
+                                               date_range)
         trade_processor.run()
         logger.info(f"total realized pnl: {strategy.position_manager.total_realized_pnl()}")
     asyncio.get_event_loop().stop()
