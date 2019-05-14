@@ -17,6 +17,7 @@ arctic = "*"
 pyti = "*"
 click-datetime = "*"
 ccxt = "*"
+pyfolio = "*"
 
 [requires]
 python_version = "3.7"

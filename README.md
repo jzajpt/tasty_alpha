@@ -1,4 +1,5 @@
 # tasty_alpha
 
-Tasty Alpha is an event-based algorithmic trading library with focus on crypto.
+Tasty Alpha is an event-based algorithmic trading platform written in Python.
+
 

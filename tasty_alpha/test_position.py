@@ -7,6 +7,9 @@ def position(amount = 1.0, ticker = "BTC"):
     asset = Asset(ticker)
     return Position(asset, amount)
 
+def test_new_position_timestamp(position):
+    assert position.timestamp
+
 def test_new_position_status(position):
     assert position.status == PositionStatus.Pending
 

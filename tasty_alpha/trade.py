@@ -1,3 +1,6 @@
+from dataclasses import dataclass
+
+@dataclass
 class Trade:
     """
     Represents a trade that has occured on a market.
@@ -7,11 +10,9 @@ class Trade:
     amount (float)
     price (float)
     """
-
-    def __init__(self, timestamp: int, amount: float, price: float) -> None:
-        self.timestamp = timestamp
-        self.amount = amount
-        self.price = price
+    timestamp: int
+    amount: float
+    price: float
 
     @property
     def dollar_value(self) -> float:

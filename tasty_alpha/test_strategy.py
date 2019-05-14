@@ -1,6 +1,7 @@
 import pytest
 from aiopubsub import Hub, Publisher
 from tasty_alpha.asset import Asset
+from tasty_alpha.broker import BacktestBroker
 from tasty_alpha.market import Markets
 from tasty_alpha.strategy import Strategy, MultiStrategy
 from tasty_alpha.trade import Trade
@@ -20,8 +21,8 @@ def test_strategy_on_new_bar_is_called():
     bar = Bar(trade)
     exchange = 'test'
     market = Markets.BTCUSD
-    strat = NewBarTestStrategy(hub)
-    print([f'{exchange}-{market}', 'new-bar'])
+    broker = BacktestBroker(hub)
+    strat = NewBarTestStrategy(hub, broker)
     publisher.publish([f'{exchange}-{market}', 'new-bar'], bar)
     assert strat.on_new_bar_called
 
@@ -31,7 +32,8 @@ def test_strategy_stores_bars():
     bars = [1, 2, 3]
     exchange = 'test'
     market = Markets.BTCUSD
-    strat = NewBarTestStrategy(hub)
+    broker = BacktestBroker(hub)
+    strat = NewBarTestStrategy(hub, broker)
     [publisher.publish([f'{exchange}-{market}', 'new-bar'], bar) for bar in bars]
     assert strat.bars == bars
 
@@ -61,8 +63,8 @@ def test_mullti_strategy_on_new_bar_is_called():
     bar = Bar(trade)
     exchange = 'test'
     market = Markets.BTCEUR
-    strat = NewBarTestMultiStrategy(hub)
-    print([f'{exchange}-{market}', 'new-bar'])
+    broker = BacktestBroker(hub)
+    strat = NewBarTestMultiStrategy(hub, broker)
     publisher.publish([f'{exchange}-{market}', 'new-bar'], bar)
     assert strat.on_new_bar_called
 
@@ -72,7 +74,8 @@ def test_multi_strategy_stores_bars():
     bars = [1, 2, 3]
     exchange = 'test'
     market = Markets.BTCUSD
-    strat = NewBarTestMultiStrategy(hub)
+    broker = BacktestBroker(hub)
+    strat = NewBarTestMultiStrategy(hub, broker)
     [publisher.publish([f'{exchange}-{market}', 'new-bar'], bar) for bar in bars]
     assert strat.bars['test-BTCUSD'] == bars
 

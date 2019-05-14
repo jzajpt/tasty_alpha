@@ -1,9 +1,10 @@
+from dataclasses import dataclass
 from .asset import Asset, Assets
 
+@dataclass
 class Market:
-    def __init__(self, base: Asset, quote: Asset):
-        self.quote = quote
-        self.base = base
+    base: Asset
+    quote: Asset
 
     def __str__(self):
         return f"{self.base.ticker}{self.quote.ticker}"

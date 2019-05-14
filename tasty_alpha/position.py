@@ -1,6 +1,9 @@
+from datetime import datetime
+from enum import Enum
+from dataclasses import dataclass, field
 from .asset import Asset
 
-class PositionStatus:
+class PositionStatus(Enum):
     """
     Wrapper class for different statuses position can be in.
     """
@@ -10,6 +13,7 @@ class PositionStatus:
     Closing = "Closing"
     Closed = "Closed"
 
+@dataclass
 class Position:
     """
     Tracks a position in an asset.
@@ -21,14 +25,13 @@ class Position:
     - cost (float) - total cost to acquire position
     - realized_pnl (float) - total realized pnl after closing position incl fees
     """
-
-    def __init__(self, asset: Asset, amount: float) -> None:
-        self.asset = asset
-        self.amount = amount
-        self.status = PositionStatus.Pending
-        self.cost = None
-        self.realized_pnl = None
-        self.unrealized_pnl = None
+    asset: Asset
+    amount: float
+    status: str = PositionStatus.Pending
+    cost: float = None
+    timestamp: datetime = field(default_factory=datetime.now)
+    realized_pnl: float = None
+    unrealized_pnl: float = None
 
     def open(self, price: float, fees: float = 0.0) -> None:
         self.cost = (price * self.amount) + fees

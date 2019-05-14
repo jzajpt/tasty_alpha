@@ -1,9 +1,15 @@
+from dataclasses import dataclass
+
+@dataclass
 class Exchange:
-    def __init__(self, name):
-        self.name = name
+    name: str
 
     def __str__(self):
         return self.name.lower()
+
+    @staticmethod
+    def default():
+        return Exchanges.Bitstamp
 
 
 class Exchanges:

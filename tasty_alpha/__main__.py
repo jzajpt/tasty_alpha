@@ -34,6 +34,13 @@ def cli():
     help='The end date of the backtest.',
 )
 @click.option(
+    '--capital',
+    '-c',
+    type=float,
+    default=10000,
+    help='The initial capital for backtest'
+)
+@click.option(
     '--bar-type',
     '-b',
     type=click.Choice(['tick', 'volume', 'dollar', 'tib']),
@@ -50,9 +57,10 @@ def cli():
 def backtest(strategy_file: str,
              start: Datetime,
              end: Datetime,
+             capital: float,
              bar_type: str,
              threshold: int) -> None:
-    run(run_backtest(strategy_file, start, end, bar_type, threshold))
+    run(run_backtest(strategy_file, start, end, capital, bar_type, threshold))
 
 
 @click.command()

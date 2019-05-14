@@ -1,6 +1,7 @@
 from aiopubsub import Key
 from ..trade import Trade
 
+
 class Bar:
     """
     Bar represents a price statistics observed during a predefined frequency.
