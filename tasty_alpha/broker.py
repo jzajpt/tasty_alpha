@@ -1,11 +1,13 @@
-from aiopubsub import Hub, Publisher
+from aiopubsub import Key, Hub, Publisher, Subscriber
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import List, Optional
+from . import events
 from .exchange import Exchange
 from .market import Market
 from .position import Position
 from .order import Order, OrderType, OrderSide
+from .trade import Trade
 
 class Broker:
     pass
@@ -14,8 +16,12 @@ class BacktestBroker(Broker):
     def __init__(self, hub: Hub) -> None:
         self.hub = hub
         self.publisher = Publisher(hub, prefix='broker')
+        self.subscriber = Subscriber(hub, 'broker')
+        self.subscriber.add_sync_listener(events.AnyNewTrade,
+                                          self.log_trade_timestamp)
         self.orders = []
         self.positions = []
+        self._timestamp = None
 
     def submit_order(self, order: Order) -> None:
         order.timestamp = self.get_timestamp()
@@ -34,6 +40,11 @@ class BacktestBroker(Broker):
         return position
 
     def get_timestamp(self) -> datetime:
-        return datetime.now()
+        if self._timestamp is not None:
+            return self._timestamp
+        else:
+            return datetime.now()
 
+    def log_trade_timestamp(self, key: Key, trade: Trade) -> None:
+        self._timestamp = trade.timestamp
 

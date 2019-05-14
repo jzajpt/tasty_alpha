@@ -8,7 +8,7 @@ def backtest_broker():
     hub = aiopubsub.Hub()
     return BacktestBroker(hub)
 
-def test_order(backtest_broker, order):
-    backtest_broker.submit_order(order)
+def test_submit_order(backtest_broker, order):
+    position = backtest_broker.submit_order(order)
     assert len(backtest_broker.orders) == 1
 

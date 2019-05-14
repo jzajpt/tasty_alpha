@@ -2,11 +2,6 @@ import pytest
 from tasty_alpha.asset import Asset
 from tasty_alpha.position import Position, PositionStatus
 
-@pytest.fixture
-def position(amount = 1.0, ticker = "BTC"):
-    asset = Asset(ticker)
-    return Position(asset, amount)
-
 def test_new_position_timestamp(position):
     assert position.timestamp
 

@@ -31,6 +31,7 @@ class Order:
     side: int
     type: OrderType
     price: Optional[float] = None
+    status: OrderStatus = OrderStatus.LOCAL
     exchange: Exchange = field(default_factory=default_exchange)
     timestamp: datetime = field(default_factory=datetime.now)
 
